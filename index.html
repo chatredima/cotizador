@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cotizador de Exámenes de Laboratorio</title>
+<link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+    :root {
+      --primary: #2aa2f1;
+      --primary-dark: #153060;
+      --primary-light: #2d5b8e;
+      --secondary: #d83b01;
+      --accent: #4cc9f0;
+      --light-bg: #f8fafc;
+      --dark-text: #2d3748;
+      --light-text: #718096;
+      --border: #e2e8f0;
+      --card-bg: #ffffff;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --radius: 8px;
+      --success: #38a169;
+      --danger: #e53e3e;
+      --warning: #dd6b20;
+      --info: #3182ce;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #edf2f7 0%, #f8fafc 100%);
+      color: var(--dark-text);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 15px;
+    }
+    
+    .price-display {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 15px 0;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 10px 20px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    
+    .header-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow);
+      transition: all 0.2s ease;
+    }
+    
+    .btn-primary {
+      background-color: var(--secondary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #b83200;
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background-color: #4a5568;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #2d3748;
+      transform: translateY(-2px);
+    }
+    
+    .patient-data {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 20px;
+      padding: 0 15px;
+    }
+    
+    @media (max-width: 768px) {
+      .patient-data {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .form-group {
+      margin-bottom: 0;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: white;
+      font-size: 14px;
+      text-align: left;
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--dark-text);
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: white;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+    }
+    
+    .date-display {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      display: inline-block;
+      font-size: 14px;
+    }
+    
+    .disclaimer {
+      background-color: #e9ecef;
+      padding: 15px 20px;
+      font-size: 12px;
+      color: var(--light-text);
+      text-align: center;
+    }
+    
+    .main-content {
+      padding: 20px;
+    }
+    
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+    }
+    
+    h2 {
+      font-size: 18px;
+      color: var(--primary);
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary-light);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    /* BARRA DE BÚSQUEDA ESTILO GOOGLE */
+    .search-container {
+      position: relative;
+      margin-bottom: 15px;
+    }
+    
+    .search-box-google {
+      display: flex;
+      align-items: center;
+      height: 44px;
+      background: #fff;
+      border: 1px solid #dfe1e5;
+      border-radius: 24px;
+      box-shadow: none;
+      padding: 0 16px;
+      transition: all 0.2s ease;
+    }
+    
+    .search-box-google:hover,
+    .search-box-google:focus-within {
+      box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+      border-color: rgba(223, 225, 229, 0);
+    }
+    
+    .search-box-google i {
+      color: #9aa0a6;
+      margin-right: 12px;
+      font-size: 16px;
+    }
+    
+    .search-box-google input {
+      flex: 1;
+      height: 100%;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      background: transparent;
+      color: #202124;
+    }
+    
+    .search-box-google input::placeholder {
+      color: #9aa0a6;
+    }
+    
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .category-btn {
+      padding: 8px 16px;
+      background-color: #e9ecef;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .category-btn:hover, .category-btn.active {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .exams-container {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 15px;
+      background: var(--light-bg);
+    }
+    
+    /* Custom scrollbar */
+    .exams-container::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .exams-container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    .exams-container::-webkit-scrollbar-thumb {
+      background: var(--primary-light);
+      border-radius: 10px;
+    }
+    
+    .exams-container::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+    
+    .exam-category {
+      margin-bottom: 20px;
+    }
+    
+    .exam-category h3 {
+      font-size: 15px;
+      color: var(--primary);
+      margin-bottom: 12px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .exam-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      background: white;
+      border-radius: 8px;
+      font-size: 14px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+    
+    .exam-item:hover {
+      border-color: var(--primary-light);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .exam-item label {
+      display: flex;
+      align-items: center;
+      margin: 0;
+      cursor: pointer;
+      flex-grow: 1;
+      font-weight: normal;
+      color: var(--dark-text);
+    }
+    
+    .exam-item input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+      accent-color: var(--primary);
+    }
+    
+    .exam-price {
+      font-weight: bold;
+      color: var(--primary);
+      font-size: 14px;
+      background: rgba(26, 54, 93, 0.1);
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+    
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: var(--light-text);
+      padding: 20px;
+      border-top: 1px solid var(--border);
+      background: var(--light-bg);
+    }
+    
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+    
+    .contact-item i {
+      color: var(--primary);
+    }
+    
+    .required::after {
+      content: "*";
+      color: var(--secondary);
+      margin-left: 3px;
+    }
+
+    .input-error {
+      border: 1px solid var(--secondary) !important;
+      background-color: #ffeaea !important;
+    }
+
+    .error-message {
+      color: var(--secondary);
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    /* Estilos para la ventana de comprobante - MODIFICADOS (sin columna de código y sin botón de PDF) */
+    .comprobante-container {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .comprobante-header {
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #2b6da3;
+      padding-bottom: 15px;
+    }
+    
+    .comprobante-company-info {
+      font-size: 16px;
+      color: #555;
+    }
+    
+    .comprobante-title {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .comprobante-title h1 {
+      color: #2b6da3;
+      margin: 0;
+      font-size: 20px;
+    }
+    
+    .comprobante-title p {
+      margin: 5px 0;
+    }
+    
+    .comprobante-client-info {
+      margin-bottom: 20px;
+    }
+    
+    .comprobante-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    
+    .comprobante-table th {
+      background-color: #2b6da3;
+      color: white;
+      padding: 10px;
+      text-align: left;
+    }
+    
+    .comprobante-table td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .comprobante-total {
+      text-align: right;
+      font-weight: bold;
+      font-size: 16px;
+      margin: 20px 0;
+    }
+    
+    .comprobante-notes {
+      font-size: 12px;
+      margin-top: 30px;
+      color: 555;
+    }
+    
+    .comprobante-footer {
+      margin-top: 50px;
+      font-size: 12px;
+      text-align: center;
+      color: #777;
+      border-top: 1px solid #ddd;
+      padding-top: 10px;
+    }
+    
+    .comprobante-buttons {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .comprobante-button {
+      padding: 10px 15px;
+      background-color: #2b6da3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .comprobante-button.save {
+      background-color: #d83b01;
+    }
+
+    /* Nuevos estilos para el sistema de sugerencias */
+    .search-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #dfe1e5;
+      border-top: none;
+      border-radius: 0 0 24px 24px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(32, 33, 36, 0.28);
+      display: none;
+    }
+
+    .search-suggestion-item {
+      padding: 10px 15px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f1f1f1;
+      font-size: 14px;
+    }
+
+    .search-suggestion-item:last-child {
+      border-bottom: none;
+    }
+
+    .search-suggestion-item:hover, .search-suggestion-item.highlighted {
+      background-color: #f0f7ff;
+    }
+
+    .suggestion-price {
+      font-weight: bold;
+      color: var(--primary);
+      font-size: 12px;
+      background: rgba(26, 54, 93, 0.1);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .highlight {
+      background-color: #fff8e1;
+      font-weight: bold;
+      padding: 0 2px;
+    }
+    
+    .exams-count {
+      background-color: var(--secondary);
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+    
+    .selected-count {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .btn-recomendaciones {
+      background-color: #e53e3e;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-recomendaciones:hover {
+      background-color: #c53030;
+      transform: translateY(-2px);
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1><i class="fas fa-flask"></i> Cotiza tus exámenes</h1>
+<p class="subtitle">Selecciona los exámenes necesarios y obtén un precio al instante</p>
+<div class="price-display">$ 0.00</div>
+<div class="selected-count">
+<span>Exámenes seleccionados: </span>
+<span class="exams-count" id="exams-count">0</span>
+</div>
+<div class="header-buttons">
+<button class="btn btn-primary" id="btn-cotizar">
+<i class="fas fa-file-invoice"></i> Cotizar
+        </button>
+<button class="btn btn-secondary" id="btn-cancelar">
+<i class="fas fa-times"></i> Cancelar
+        </button>
+</div>
+<div class="patient-data">
+<div class="form-group">
+<label for="cedula">Cédula</label>
+<input id="cedula" maxlength="10" placeholder="Solo números (máx. 10 dígitos)" type="text"/>
+<div class="error-message" id="cedula-error">Solo se permiten números</div>
+</div>
+<div class="form-group">
+<label class="required" for="paciente">Paciente</label>
+<input id="paciente" placeholder="Nombre completo del paciente" type="text"/>
+</div>
+</div>
+<div class="date-display">
+<i class="fas fa-calendar-alt"></i> Fecha de cotización: <span id="fecha-actual"></span>
+<!-- Botón de recomendaciones -->
+<div style="text-align:center; margin-top:10px;">
+<button class="btn-recomendaciones" onclick="abrirRecomendaciones()">
+<i class="fas fa-notes-medical"></i> Recomendaciones para exámenes especiales
+        </button>
+</div>
+</div></header>
+<div class="disclaimer">
+<p>Nos reservamos el derecho de modificar precios sin previo aviso. Aplican restricciones.</p>
+</div>
+<div class="card">
+<h2><i class="fas fa-stethoscope"></i> Seleccione los exámenes</h2>
+<!-- BARRA DE BÚSQUEDA ESTILO GOOGLE -->
+<div class="search-container">
+<div class="search-box-google">
+<i class="fas fa-search"></i>
+<input id="buscar" placeholder="Buscar examen..." type="text"/>
+<div class="search-suggestions" id="suggestions-container">
+<!-- Las sugerencias se generarán con JavaScript -->
+</div>
+</div>
+</div>
+<div class="categories" id="categorias-container">
+<!-- Las categorías se generarán con JavaScript -->
+</div>
+<div class="exams-container" id="examenes-container">
+<!-- Los exámenes se generarán con JavaScript -->
+</div>
+</div>
+</div>
+<footer>
+<p>📍 Dirección: Tulcán 3206 y Venezuela, Guayaquil</p>
+<div class="contact-info">
+<div class="contact-item">
+<i class="fas fa-phone"></i>
+<span>(04) 3903657 - (04) 3903659</span>
+</div>
+<div class="contact-item">
+<i class="fab fa-whatsapp"></i>
+<span>+593 99 999 9999</span>
+</div>
+<div class="contact-item">
+<i class="fas fa-envelope"></i>
+<span>redima@gye.satnet.net</span>
+</div>
+</div>
+</footer>
+
+<!-- SECCIÓN PARA DATOS EDITABLES MANUALMENTE -->
+<script id="datos-examenes" type="application/json">
+    [
+      {
+        "categoria": "Perfiles",
+        "examenes": [
+          { "nombre": "CALCIO IÓNICO = CALCIO IÓNICO + CALCIO TOTAL", "precio": 5.90 },
+          { "nombre": "COLESTEROL LDL/VLDL = COLESTEROL TOTAL/HDL + TRIGLICÉRIDOS", "precio": 8.92 },
+          { "nombre": "DEPURACIÓN EN ORINA DE 24 HORAS = DEPURACIÓN EN ORINA + CREATININA EN SANGRE + CREATININA EN ORINA DE 24 HORAS", "precio": 7.90 },
+          { "nombre": "GLUCOSA POSTPRANDIAL = GLUCOSA POSTPRANDIAL + GLUCOSA EN AYUNAS", "precio": 5.04 },
+          { "nombre": "INDICE ANDROGENICO = TESTOSTERONA + SHBG", "precio": 30.16 },
+          { "nombre": "INSULINA POSTPRANDIAL = INSULINA POSTPRANDIAL + INSULINA EN AYUNAS", "precio": 20.76 },
+          { "nombre": "FOSFATASA ACIDA PROSTÁTICA = FOSFATASA ACIDA PROSTÁTICA + FOSFATASA ACIDA TOTAL", "precio": 8.96 },
+          { "nombre": "LIPIDOS TOTALES = LIPIDOS TOTALES + COLESTEROL TOTAL + TRIGLICÉRIDOS", "precio": 5.79 }
+        ]
+      },
+      {
+        "categoria": "Anticuerpos / Inmunologia",
+        "examenes": [
+          { "nombre": "AC. ANTI-MITOCONDRIALES-IF", "precio": 18.52 },
+          { "nombre": "AC. ANTI-MUSCULO LISO", "precio": 22.00 },
+          { "nombre": "ACIDO LACTICO", "precio": 17.60 },
+          { "nombre": "ALDOLASA", "precio": 12.65 },
+          { "nombre": "ALDOSTERONA SÉRICA - RIA", "precio": 24.15 },
+          { "nombre": "ANCA P/C", "precio": 27.37 },
+          { "nombre": "ANTC. ANTIENDOMISIO IGA", "precio": 20.70 },
+          { "nombre": "ANTICENTROMERO (IFI)", "precio": 20.70 },
+          { "nombre": "ANTICUERPO NEUTRALIZANTE NAB", "precio": 23.00 },
+          { "nombre": "ASCA. ANTICUERPOS IGA", "precio": 20.70 },
+          { "nombre": "ASCA. ANTICUERPOS IGG", "precio": 20.70 },
+          { "nombre": "BETA CROSS LABPS", "precio": 57.50 },
+          { "nombre": "CARDIOLIPINA ANTIC. IGM", "precio": 13.80 },
+          { "nombre": "CHAGAS", "precio": 19.80 },
+          { "nombre": "D201 BLOMIA TROPICAL", "precio": 14.72 },
+          { "nombre": "DIGOXINA", "precio": 11.48 },
+          { "nombre": "ENOLASA NEURON ESPECIFICA", "precio": 29.67 },
+          { "nombre": "EPSTEIN BARR VIRUS. ANTICUERPOS IGG", "precio": 12.65 },
+          { "nombre": "EPSTEIN BARR VIRUS. ANTICUERPOS IGM", "precio": 13.92 },
+          { "nombre": "HERPES VIRUS TIPO 1 ANTICUERPOS IGG", "precio": 7.00 },
+          { "nombre": "HERPES VIRUS TIPO 2 ANTICUERPOS IGM", "precio": 7.00 },
+          { "nombre": "INFLUENZA A Y B, ANTIGENO, POR IC.", "precio": 25.76 },
+          { "nombre": "INTERLEUKINA 6 (IL-6)", "precio": 27.60 },
+          { "nombre": "LEPTOSPIRA ANTICUERPO IGG", "precio": 12.08 },
+          { "nombre": "LÍQUIDO ASCÍTICO, ESTUDIO CITOQUÍMICO", "precio": 31.88 },
+          { "nombre": "MIOGLOBINA", "precio": 24.15 },
+          { "nombre": "PROTEINAS C (ACTIVIDAD)", "precio": 38.64 },
+          { "nombre": "PRUEBA DE ANTIGENO HISOPADO", "precio": 20.00 },
+          { "nombre": "S P E D1 DERMTPH. PTERONYSSINUS", "precio": 14.72 },
+          { "nombre": "S P E H1 POLVO CASERO GREER", "precio": 14.72 },
+          { "nombre": "SPE E1 PELO DE GATO", "precio": 14.72 },
+          { "nombre": "SPE E2 PELO DE PERRO", "precio": 14.72 },
+          { "nombre": "SPE E5 CASPA DE PERRO", "precio": 14.72 },
+          { "nombre": "SPE F2 LECHE", "precio": 14.72 },
+          { "nombre": "SPE I6 CUCARACHA", "precio": 14.72 },
+          { "nombre": "TOXOPLASMA IGG-AVIDEZ", "precio": 64.40 },
+          { "nombre": "TRANSGLUTAMINASA TISULAR, AC. IGA", "precio": 17.25 },
+          { "nombre": "VIH 1 Y 2 ANTICUERPOS Y AG P24", "precio": 11.50 },
+          { "nombre": "VIMENTINA CITRULINADA ANTICUERPOS SUERO", "precio": 23.00 },
+          { "nombre": "VIRUS SINCITIAL RESP. ANTIGENO", "precio": 26.59 },
+          { "nombre": "ZINC", "precio": 18.63 },
+          { "nombre": "AC. ANTI MTB( TUBERCULOSIS)", "precio": 17.43 },
+          { "nombre": "AC. ANTI-DNA", "precio": 14.00 },
+          { "nombre": "COMPLEMENTO C3", "precio": 10.32 },
+          { "nombre": "COMPLEMENTO C4", "precio": 10.46 },
+          { "nombre": "AC. ANTI-HBS", "precio": 10.77 },
+          { "nombre": "DENGUE IGG-IGM (INmUNOCROMATOGRAFIA)", "precio": 11.50 },
+          { "nombre": "AC. ANTI H. PYLORI IGG", "precio": 9.35 },
+          { "nombre": "AC. ANTI H. PYLORI IGM", "precio": 9.35 },
+          { "nombre": "IGE (INMUNOGLOBULINA)", "precio": 12.10 },
+          { "nombre": "IGG", "precio": 9.43 },
+          { "nombre": "AC. ANTI-AMEBAS (SERAMEBAS)", "precio": 13.00 },
+          { "nombre": "IGM", "precio": 9.43 },
+          { "nombre": "IGA", "precio": 9.43 },
+          { "nombre": "TORCH IGG-IGM", "precio": 72.00 },
+          { "nombre": "AC. ANTI-RUBEOLA IGM", "precio": 7.00 },
+          { "nombre": "AC. ANTI-RUBEOLA IGG", "precio": 7.00 },
+          { "nombre": "AC. CITOMEGALOVIRUS IGM (ANTICUERPOS)", "precio": 8.00 },
+          { "nombre": "AC. CITOMEGALOVIRUS IGG (ANTICUERPOS)", "precio": 8.00 },
+          { "nombre": "AC. HERPES 1 IGG", "precio": 7.00 },
+          { "nombre": "AC. HERPES 2 IGG", "precio": 7.00 },
+          { "nombre": "AC. ANTI-HBCORE IGM", "precio": 12.05 },
+          { "nombre": "AC. ANTI-HBCORE IGG", "precio": 10.38 },
+          { "nombre": "AC. ANTI-HBE", "precio": 21.55 },
+          { "nombre": "AC. ANTI-HEPATITIS A IGM", "precio": 10.34 },
+          { "nombre": "AC. ANTI-HEPATITIS A IGG", "precio": 11.84 },
+          { "nombre": "HEPATITIS B HB(S)AG", "precio": 9.89 },
+          { "nombre": "HEPATITIS C AC. ANTI - VHC", "precio": 11.95 },
+          { "nombre": "HEPATITIS B HBE AG.", "precio": 20.20 },
+          { "nombre": "AC. ANTI-NUCLEARES (A.N.A)", "precio": 14.00 },
+          { "nombre": "AC. ANTI-HIV 1 Y 2", "precio": 8.15 },
+          { "nombre": "AC. ANTI-TIROIDEOS", "precio": 29.63 },
+          { "nombre": "AC. MICROSOMALES (TPO) (ANTIMICROSOMAS)", "precio": 16.55 },
+          { "nombre": "AC. ANTI-TIROGLOBULINA", "precio": 16.55 },
+          { "nombre": "VIH - AC. ANTI-VIH 1/2", "precio": 2.00 }
+        ]
+      },
+      {
+        "categoria": "Bioquimicos",
+        "examenes": [
+          { "nombre": "ANTITROMBINA III", "precio": 26.45 },
+          { "nombre": "CISTATINA C", "precio": 29.15 },
+          { "nombre": "PCR (CUANTITATIVA)", "precio": 7.70 },
+          { "nombre": "ANTIESTRESPTOLISINA (ASTO CUANTITATIVO)", "precio": 5.50 },
+          { "nombre": "FACTOR REUMATOIDEO", "precio": 5.78 },
+          { "nombre": "GLUCO HEMOGLOBINA (HEMOGLOBINA GLICOSILADA)", "precio": 12.10 },
+          { "nombre": "GLUCOSA", "precio": 1.74 },
+          { "nombre": "GLUCOSA POSTPRANDIAL", "precio": 3.30 },
+          { "nombre": "HOMA-IR", "precio": 12.12 },
+          { "nombre": "COLESTEROL TOTAL", "precio": 1.93 },
+          { "nombre": "COLESTEROL HDL", "precio": 5.06 },
+          { "nombre": "TRIGLICERIDOS", "precio": 1.93 },
+          { "nombre": "LIPIDOS TOTALES", "precio": 1.93 },
+          { "nombre": "ESTERES COLESTEROL", "precio": 2.08 },
+          { "nombre": "UREA", "precio": 1.74 },
+          { "nombre": "CREATININA", "precio": 1.93 },
+          { "nombre": "ACIDO URICO", "precio": 1.67 },
+          { "nombre": "CALCIO", "precio": 2.20 },
+          { "nombre": "CALCIO IONICO", "precio": 3.70 },
+          { "nombre": "PROTEINAS TOTALES", "precio": 2.31 },
+          { "nombre": "BILIRRUBINAS TODAS", "precio": 2.31 },
+          { "nombre": "BETA 2 MICROGLOBULINA", "precio": 12.07 },
+          { "nombre": "BNP (PEPTICO NATRIURETICO)", "precio": 44.16 },
+          { "nombre": "SHBG GLOBULINA TRANSP.DE HORMONAS SEXUALES", "precio": 20.70 },
+          { "nombre": "VITAMINA D", "precio": 37.77 },
+          { "nombre": "FOSFORO", "precio": 3.85 },
+          { "nombre": "MAGNESIO", "precio": 4.40 },
+          { "nombre": "TEST DE SULLIVAN", "precio": 9.90 },
+          { "nombre": "DESHIDROGENASA LACTICA (LDH)", "precio": 2.42 },
+          { "nombre": "LIPOPROTEINA A LP(A)", "precio": 26.66 },
+          { "nombre": "APOLIPOPROTEINA A1", "precio": 11.01 },
+          { "nombre": "APOLIPOPROTEINA B", "precio": 11.01 },
+          { "nombre": "FOSFOLIPIDOS", "precio": 3.77 },
+          { "nombre": "FRUCTOSAMINA", "precio": 9.57 },
+          { "nombre": "AMONIO", "precio": 12.84 },
+          { "nombre": "PEPTIDO C", "precio": 15.18 },
+          { "nombre": "HAPTOGLOBINA", "precio": 18.77 },
+          { "nombre": "TROPONINA I", "precio": 14.00 },
+          { "nombre": "TIROGLOBULINA", "precio": 10.49 },
+          { "nombre": "FENITOINA", "precio": 11.88 },
+          { "nombre": "ERITROPOYETINA", "precio": 24.20 },
+          { "nombre": "HOMOCISTEINA", "precio": 43.78 },
+          { "nombre": "TOLERANCIA A LA GLUCOSA", "precio": 9.35 }
+        ]
+      },
+      {
+        "categoria": "Citologias",
+        "examenes": [
+          { "nombre": "TINCION DE ZIEHL BDK-BACILO-KOCH-ESPUTO", "precio": 2.20 }
+        ]
+      },
+      {
+        "categoria": "Cultivos-Bacterología",
+        "examenes": [
+          { "nombre": "ADA", "precio": 17.25 },
+          { "nombre": "CITOLOGIA DE MOCO NASAL", "precio": 1.65 },
+          { "nombre": "CITOLOGIA TINCION DE WRIGHT", "precio": 4.05 },
+          { "nombre": "CULTIVO DE ABSCESOS", "precio": 11.55 },
+          { "nombre": "CULTIVO DE ESPERMA (NO INVESTIGACION DE NEISSERIA NI HEAMOPHILLUS)", "precio": 11.55 },
+          { "nombre": "CULTIVO DE ESPUTO", "precio": 11.55 },
+          { "nombre": "CULTIVO DE HERIDAS", "precio": 11.55 },
+          { "nombre": "CULTIVO DE SECRECION BRONQUIAL", "precio": 11.55 },
+          { "nombre": "EX. EN FRESCO (SECRECION VAGINAL)", "precio": 1.99 },
+          { "nombre": "KOH EN LESIONES DERMICAS (LEVADURAS, HIFAS, ACAROS, DERMATOFITOS)", "precio": 7.70 },
+          { "nombre": "LINFOCITOS T: CONTEO DE CÉLULAS CD4", "precio": 64.40 },
+          { "nombre": "LIQUIDO PLEURAL, ESTUDIO CITOQUÍMICO", "precio": 31.88 },
+          { "nombre": "NICKERSON PARA ASPERGILLUS (ESPUTO/ABSCESOS/SEC BRONQUIALES HERIDAS)", "precio": 11.55 },
+          { "nombre": "NICKERSON PARA CANDIDA (SV / HECES)", "precio": 11.55 },
+          { "nombre": "EX FRESCO (EXUDADO FARINGEO)", "precio": 1.99 },
+          { "nombre": "TINCION DE GRAM", "precio": 2.20 },
+          { "nombre": "PH SECRECIONES", "precio": 3.30 },
+          { "nombre": "TEST DE AMINAS - SECRECION VAGINAL", "precio": 7.70 },
+          { "nombre": "STREP. A", "precio": 12.14 },
+          { "nombre": "CULTIVO (SECRECION VAGINAL)", "precio": 11.55 },
+          { "nombre": "CULTIVO (EXUDADO FARINGEO)", "precio": 11.55 },
+          { "nombre": "CULTIVO Y ANTIBIOGRAMA", "precio": 11.55 },
+          { "nombre": "NICKERSON HONGOS", "precio": 4.40 }
+        ]
+      },
+      {
+        "categoria": "Electrolitos",
+        "examenes": [
+          { "nombre": "COVID SARS-COV 2 CUANTITATIVA", "precio": 25.00 },
+          { "nombre": "ELECTROLITOS (NA ,K, CL)", "precio": 9.75 },
+          { "nombre": "LITIO", "precio": 10.37 }
+        ]
+      },
+      {
+        "categoria": "Enzimas",
+        "examenes": [
+          { "nombre": "AMILASA", "precio": 3.30 },
+          { "nombre": "CK MB", "precio": 9.15 },
+          { "nombre": "COLINESTERASA", "precio": 4.27 },
+          { "nombre": "CPK (CREATININA FOSFORO QUINASA-CK)", "precio": 5.00 },
+          { "nombre": "FOSFATASA ACIDA PROSTATICA", "precio": 5.43 },
+          { "nombre": "FOSFATASA ACIDA TOTAL", "precio": 3.53 },
+          { "nombre": "FOSFATASA ALCALINA", "precio": 2.60 },
+          { "nombre": "GGTP", "precio": 1.93 },
+          { "nombre": "GOT (TGO TRANSAMINASAS)", "precio": 1.93 },
+          { "nombre": "GPT (GPT TRANSAMINASAS)", "precio": 1.93 },
+          { "nombre": "LIPASA", "precio": 5.78 }
+        ]
+      },
+      {
+        "categoria": "Especiales",
+        "examenes": [
+          { "nombre": "ACIDO VALPROICO", "precio": 11.77 },
+          { "nombre": "CARBAMAZEPINA", "precio": 11.77 },
+          { "nombre": "CARDIOLIPINA ANTIC. IGA", "precio": 17.25 },
+          { "nombre": "CARDIOLIPINA ANTIC. IGG", "precio": 13.80 },
+          { "nombre": "CHLAMYDIA TRACHOMATIS- IGG", "precio": 10.00 },
+          { "nombre": "COCIENTE CREATININA/MICROALBUMINA", "precio": 15.76 },
+          { "nombre": "COCIENTE PROTEINA/CREATININA", "precio": 6.52 },
+          { "nombre": "CORTISOL 4 - 6 PM", "precio": 10.35 },
+          { "nombre": "ESTRIOL", "precio": 11.88 },
+          { "nombre": "INDICE RETICULOCITARIO + HB RETICULOCITARIA", "precio": 5.52 },
+          { "nombre": "INTERLUQUINA", "precio": 28.00 },
+          { "nombre": "L K M -1", "precio": 20.61 },
+          { "nombre": "OSTEOCALCINA", "precio": 32.20 },
+          { "nombre": "PROCALCITONINA", "precio": 40.25 },
+          { "nombre": "PROT. DE BENCE-JONES- ORINA OCASIONAL", "precio": 5.52 },
+          { "nombre": "PROTEINA 4 EPIDIDIMAL HUMANA", "precio": 33.93 },
+          { "nombre": "PROTEINA ASOCIADA AL EMBARAZO -PAPP-A", "precio": 25.76 },
+          { "nombre": "RENINA ACTIVIDAD PLASMATICA", "precio": 33.06 },
+          { "nombre": "RESERVA ALCALINA", "precio": 7.05 },
+          { "nombre": "RNP ANTICUERPOS", "precio": 14.00 },
+          { "nombre": "SARAMPIÓN, ANTICUERPOS IGG", "precio": 14.95 },
+          { "nombre": "SARAMPIÓN, ANTICUERPOS IGM", "precio": 14.95 },
+          { "nombre": "SCLERO-70", "precio": 12.88 },
+          { "nombre": "SIFILIS, AC. IGM A T. PALLIDUM", "precio": 16.10 },
+          { "nombre": "TRIPLE TEST", "precio": 30.16 },
+          { "nombre": "VIH ANTIC PRUEBA CONFIRMATORIA WBLOT", "precio": 92.00 }
+        ]
+      },
+      {
+        "categoria": "Heces",
+        "examenes": [
+          { "nombre": "ADENOVIRUS (HECES)", "precio": 12.00 },
+          { "nombre": "AG. H. PYLORI HECES", "precio": 17.32 },
+          { "nombre": "CALPROTECTINA FECAL", "precio": 27.60 },
+          { "nombre": "CITOLOGIA DE MOCO FECAL", "precio": 1.65 },
+          { "nombre": "CULTIVO (HECES)", "precio": 11.55 },
+          { "nombre": "LACTOFERRINA FECAL", "precio": 18.40 },
+          { "nombre": "PARASITOLOGICO", "precio": 1.99 },
+          { "nombre": "PARASITOLOGICO - SERIADO", "precio": 5.96 },
+          { "nombre": "PH HECES", "precio": 3.30 },
+          { "nombre": "PRUEBA DE GRAHAM (OXYURUS)", "precio": 4.60 },
+          { "nombre": "ROTAVIRUS", "precio": 9.24 },
+          { "nombre": "SANGRE OCULTA", "precio": 2.64 },
+          { "nombre": "SUDAM III", "precio": 5.52 },
+          { "nombre": "SUSTANCIAS REDUCTORAS", "precio": 5.06 },
+          { "nombre": "TINCION DE GRAM (HECES)", "precio": 2.20 }
+        ]
+      },
+      {
+        "categoria": "Hematologicos",
+        "examenes": [
+          { "nombre": "ACIDO FOLICO", "precio": 12.07 },
+          { "nombre": "ERITROSEDIMENTACION (VSG-VELOC.SEDIM.GLOBUL)", "precio": 4.40 },
+          { "nombre": "FERRITINA", "precio": 10.72 },
+          { "nombre": "FROTIS DE SANGRE", "precio": 3.70 },
+          { "nombre": "GRUPO SANGUINEO (FACTOR RH)", "precio": 1.99 },
+          { "nombre": "HEMOGRAMA COMPLETO + PLAQUETAS", "precio": 4.40 },
+          { "nombre": "HIERRO SERICO", "precio": 3.30 },
+          { "nombre": "PLAQUETAS", "precio": 2.13 },
+          { "nombre": "PLASMODIUM (PROTOZOARIO-PALUDISMO-HEMATOZAURIOS)", "precio": 1.65 },
+          { "nombre": "PLOMO", "precio": 34.65 },
+          { "nombre": "RETICULOSITOS", "precio": 3.96 },
+          { "nombre": "TIEMPO DE COOMBS DIRECTO", "precio": 6.73 },
+          { "nombre": "TIEMPO DE COOMBS INDIRECTO", "precio": 8.28 },
+          { "nombre": "TRANSFERRINA (CAPACIDAD FIJACION DE HIERRO)", "precio": 10.56 },
+          { "nombre": "VITAMINA B12", "precio": 12.07 }
+        ]
+      },
+      {
+        "categoria": "Hemostasico",
+        "examenes": [
+          { "nombre": "VITAMINA B12", "precio": 12.07 },
+          { "nombre": "PROTROMBINA, ANTICUERPOS IGM", "precio": 20.06 },
+          { "nombre": "RETRACCIÓN DEL COAGULO", "precio": 3.22 },
+          { "nombre": "TIEMPO DE COAGULACION", "precio": 1.76 },
+          { "nombre": "TIEMPO DE PROTROMBINA (TP)", "precio": 2.75 },
+          { "nombre": "TIEMPO DE SANGRIA", "precio": 1.76 },
+          { "nombre": "TIEMPO PARCIAL DE TROMBOPLASTINA (TPT)", "precio": 2.75 }
+        ]
+      },
+      {
+        "categoria": "Hormonales",
+        "examenes": [
+          { "nombre": "17 BETA ESTRADIOL", "precio": 9.52 },
+          { "nombre": "17 HIDROXIPROGESTERONA", "precio": 16.10 },
+          { "nombre": "ACTH (HORMONA ADRENOCORTICOTROPO)", "precio": 12.98 },
+          { "nombre": "ANDROSTENEDIONA", "precio": 21.45 },
+          { "nombre": "CORTISOL A.M.", "precio": 8.09 },
+          { "nombre": "DHEAS", "precio": 12.98 },
+          { "nombre": "FSH", "precio": 9.53 },
+          { "nombre": "HCG CUANTITATIVA (GONADOTROFINA CORIÓNICA)", "precio": 11.24 },
+          { "nombre": "HGH (HORMONA DE CRECIMENTO)", "precio": 12.98 },
+          { "nombre": "IGF1", "precio": 21.53 },
+          { "nombre": "IGFBP-3", "precio": 24.30 },
+          { "nombre": "INSULINA", "precio": 10.38 },
+          { "nombre": "INSULINA POSTPANDRIAL", "precio": 10.38 },
+          { "nombre": "LH", "precio": 9.52 },
+          { "nombre": "PROGESTERONA", "precio": 9.52 },
+          { "nombre": "PROLACTINA", "precio": 9.52 },
+          { "nombre": "PRUEBA DE EMBarAZO", "precio": 3.30 },
+          { "nombre": "PRUEBA DE EMBARAZO (ORINA)", "precio": 3.30 },
+          { "nombre": "PTH", "precio": 12.66 },
+          { "nombre": "T3 LIBRE", "precio": 7.70 },
+          { "nombre": "T3 TOTAL", "precio": 8.80 },
+          { "nombre": "T4 LIBRE", "precio": 7.70 },
+          { "nombre": "T4 TOTAL", "precio": 8.80 },
+          { "nombre": "TESTOSTERONA", "precio": 9.46 },
+          { "nombre": "TESTOSTERONA LB (CALC)", "precio": 28.82 },
+          { "nombre": "TSH", "precio": 8.80 }
+        ]
+      },
+      {
+        "categoria": "Inmunocromatografia",
+        "examenes": [
+          { "nombre": "ALERGENO HECES DE PALOMA, ANTICUERPO", "precio": 16.10 }
+        ]
+      },
+      {
+        "categoria": "Marcadores tumorales",
+        "examenes": [
+          { "nombre": "AFP", "precio": 12.45 },
+          { "nombre": "CA 72-4", "precio": 26.44 },
+          { "nombre": "CA 125", "precio": 16.39 },
+          { "nombre": "CA 15-3", "precio": 16.39 },
+          { "nombre": "CA 19-9", "precio": 16.39 },
+          { "nombre": "CALCITONINA", "precio": 24.15 },
+          { "nombre": "CEA (ACE-ANTIGENO CAR)", "precio": 10.47 },
+          { "nombre": "CYFRA 21-1", "precio": 22.44 },
+          { "nombre": "PSA LIBRE", "precio": 10.45 },
+          { "nombre": "PSA TOTAL", "precio": 9.35 }
+        ]
+      },
+      {
+        "categoria": "Orina",
+        "examenes": [
+          { "nombre": "ACIDO URICO (ORINA)", "precio": 4.16 },
+          { "nombre": "AMILASA (ORINA)", "precio": 6.05 },
+          { "nombre": "CALCIO (ORINA)", "precio": 4.16 },
+          { "nombre": "CALCIO EN ORINA 24 HORAS", "precio": 3.22 },
+          { "nombre": "CLORO (ORINA)", "precio": 4.16 },
+          { "nombre": "CREATININA EN ORINA", "precio": 3.30 },
+          { "nombre": "CREATININA EN ORINA / 24 H", "precio": 2.60 },
+          { "nombre": "CULTIVO (ORINA)", "precio": 11.55 },
+          { "nombre": "DEPURACION CREATININA (CREAT+SANG+ORINA 24H)", "precio": 3.37 },
+          { "nombre": "FISICO QUIMICO SEDIMENTO (F.Q.S)", "precio": 2.31 },
+          { "nombre": "FOSFORO (ORINA)", "precio": 4.16 },
+          { "nombre": "MAGNESIO (ORINA)", "precio": 4.16 },
+          { "nombre": "MICROALBUMINA 24 HORAS", "precio": 11.27 },
+          { "nombre": "MICROALBUMINAS", "precio": 7.70 },
+          { "nombre": "PIRILYNKS", "precio": 38.50 },
+          { "nombre": "POTASIO EN ORINA", "precio": 4.16 },
+          { "nombre": "PROTEINA EN ORINA (NORMAL)", "precio": 6.05 },
+          { "nombre": "PROTEINA S LIBRE", "precio": 44.16 },
+          { "nombre": "PROTEINAS / ORINA 24 HORAS", "precio": 6.36 },
+          { "nombre": "SODIO EN ORINA", "precio": 4.16 },
+          { "nombre": "TINCION DE GRAM (ORINA)", "precio": 1.93 },
+          { "nombre": "UREA EN ORINA (NORMAL)", "precio": 6.05 }
+        ]
+      },
+      {
+        "categoria": "Serologicos",
+        "examenes": [
+          { "nombre": "UREA EN ORINA (NORMAL)", "precio": 6.05 },
+          { "nombre": "DIMERO D", "precio": 16.50 },
+          { "nombre": "MONOTEST", "precio": 8.66 },
+          { "nombre": "PCR LATEX", "precio": 1.93 },
+          { "nombre": "PEPTIDO CITRULINADO", "precio": 20.91 },
+          { "nombre": "RA TEST (LATEX)", "precio": 1.93 },
+          { "nombre": "REACCION DE WIDAL (TIFOIDEA)", "precio": 2.45 },
+          { "nombre": "REACCION WEIL FELIX", "precio": 1.67 },
+          { "nombre": "VDRL (SIFILIS-LUES)", "precio": 2.75 },
+          { "nombre": "VDRL CUANTITATIVO", "precio": 6.90 }
+        ]
+      }
+    ]
+  </script>
+<script>
+    // Variables globales
+    let examenesSeleccionados = [];
+    let categoriaActual = "todas";
+    let examenesDB = [];
+    let todosExamenes = [];
+    let sugerenciasActuales = [];
+    let indiceSugerenciaSeleccionada = -1;
+
+    // ===== FUNCIONALIDAD DEL COTIZADOR =====
+    
+    // Función para obtener datos desde el HTML
+    function obtenerDatosExamenes() {
+      try {
+        const datosElemento = document.getElementById('datos-examenes');
+        if (!datosElemento) return [];
+        
+        const datos = JSON.parse(datosElemento.textContent);
+        return datos;
+      } catch (e) {
+        console.error('Error al parsear datos manuales:', e);
+        return [];
+      }
+    }
+
+    // Inicializar la aplicación
+    document.addEventListener('DOMContentLoaded', function() {
+      // Establecer fecha actual
+      const hoy = new Date();
+      document.getElementById("fecha-actual").textContent = formatearFecha(hoy);
+      
+      // Cargar datos desde el HTML
+      examenesDB = obtenerDatosExamenes();
+      
+      // Crear lista plana de todos los exámenes
+      examenesDB.forEach(categoria => {
+        categoria.examenes.forEach(examen => {
+          todosExamenes.push({
+            nombre: examen.nombre,
+            precio: examen.precio,
+            categoria: categoria.categoria
+          });
+        });
+      });
+      
+      generarCategorias();
+      generarExamenes();
+      calcularTotal();
+      
+      // Configurar event listeners
+      document.getElementById('cedula').addEventListener('input', function() {
+        validarCedula(this);
+      });
+      
+      document.getElementById('paciente').addEventListener('input', function() {
+        convertirAMayusculas(this);
+      });
+      
+      document.getElementById('buscar').addEventListener('input', function() {
+        filtrarExamenes();
+      });
+      
+      document.getElementById('buscar').addEventListener('focus', function() {
+        mostrarSugerencias();
+      });
+      
+      document.getElementById('buscar').addEventListener('blur', function() {
+        setTimeout(ocultarSugerencias, 200);
+      });
+      
+      document.getElementById('buscar').addEventListener('keydown', function(e) {
+        manejarTeclado(e);
+      });
+      
+      document.getElementById('btn-cotizar').addEventListener('click', function() {
+        imprimirCotizacion();
+      });
+      
+      document.getElementById('btn-cancelar').addEventListener('click', function() {
+        limpiarFormulario();
+      });
+    });
+
+    // Función para validar que solo se ingresen números en la cédula
+    function validarCedula(input) {
+      const errorMessage = document.getElementById('cedula-error');
+      // Remover cualquier carácter que no sea número
+      input.value = input.value.replace(/[^0-9]/g, '');
+      
+      // Mostrar u ocultar mensaje de error
+      if (input.value.length > 0 && /[^0-9]/.test(input.value)) {
+        input.classList.add('input-error');
+        errorMessage.style.display = 'block';
+      } else {
+        input.classList.remove('input-error');
+        errorMessage.style.display = 'none';
+      }
+    }
+
+    // Función para convertir texto a mayúsculas
+    function convertirAMayusculas(input) {
+      // Guardar la posición del cursor
+      const inicio = input.selectionStart;
+      const fin = input.selectionEnd;
+      
+      // Convertir a mayúsculas
+      input.value = input.value.toUpperCase();
+      
+      // Restaurar la posición del cursor
+      input.setSelectionRange(inicio, fin);
+    }
+
+    // Función para formatear la fecha
+    function formatearFecha(fecha) {
+      const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+      return fecha.toLocaleDateString('es-ES', opciones);
+    }
+
+    // Función para generar las categorías
+    function generarCategorias() {
+      const contenedor = document.getElementById("categorias-container");
+      contenedor.innerHTML = "";
+      
+      // Botón para todas las categorías
+      const btnTodas = document.createElement("button");
+      btnTodas.className = "category-btn active";
+      btnTodas.textContent = "Todos";
+      btnTodas.addEventListener('click', function() {
+        filtrarPorCategoria("todas");
+      });
+      contenedor.appendChild(btnTodas);
+      
+      // Botones para cada categoría
+      examenesDB.forEach(categoria => {
+        const btn = document.createElement("button");
+        btn.className = "category-btn";
+        btn.textContent = categoria.categoria;
+        btn.addEventListener('click', function() {
+          filtrarPorCategoria(categoria.categoria);
+        });
+        contenedor.appendChild(btn);
+      });
+    }
+
+    // Función para generar los exámenes
+    function generarExamenes(categoria = "todas") {
+      const contenedor = document.getElementById("examenes-container");
+      contenedor.innerHTML = "";
+      
+      examenesDB.forEach(grupo => {
+        if (categoria === "todas" || grupo.categoria === categoria) {
+          const categoryDiv = document.createElement("div");
+          categoryDiv.className = "exam-category";
+          
+          const title = document.createElement("h3");
+          title.textContent = grupo.categoria;
+          categoryDiv.appendChild(title);
+          
+          grupo.examenes.forEach(examen => {
+            const examItem = document.createElement("div");
+            examItem.className = "exam-item";
+            
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.value = examen.nombre;
+            checkbox.dataset.precio = examen.precio;
+            checkbox.addEventListener('change', function() {
+              toggleExamen(this);
+            });
+            
+            // Si el examen ya estaba seleccionado, marcar el checkbox
+            if (examenesSeleccionados.some(e => e.nombre === examen.nombre)) {
+              checkbox.checked = true;
+            }
+            
+            const label = document.createElement("label");
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(examen.nombre));
+            
+            const priceSpan = document.createElement("span");
+            priceSpan.className = "exam-price";
+            priceSpan.textContent = `$${examen.precio.toFixed(2)}`;
+            
+            examItem.appendChild(label);
+            examItem.appendChild(priceSpan);
+            
+            categoryDiv.appendChild(examItem);
+          });
+          
+          contenedor.appendChild(categoryDiv);
+        }
+      });
+      
+      // Actualizar contador
+      actualizarContadorExamenes();
+    }
+
+    // Función para filtrar por categoría
+    function filtrarPorCategoria(categoria) {
+      // Actualizar botones activos
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      event.target.classList.add('active');
+      
+      // Generar exámenes de la categoría seleccionada
+      categoriaActual = categoria;
+      generarExamenes(categoria);
+    }
+
+    // Función para filtrar exámenes por texto
+    function filtrarExamenes() {
+      const texto = document.getElementById("buscar").value.toLowerCase();
+      
+      // Actualizar sugerencias
+      actualizarSugerencias(texto);
+      
+      document.querySelectorAll('.exam-item').forEach(item => {
+        const nombre = item.querySelector('label').textContent.toLowerCase();
+        if (nombre.includes(texto)) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    // Función para mostrar sugerencias de búsqueda
+    function mostrarSugerencias() {
+      const texto = document.getElementById("buscar").value.toLowerCase();
+      if (texto) {
+        actualizarSugerencias(texto);
+      }
+    }
+
+    // Función para actualizar las sugerencias de búsqueda
+    function actualizarSugerencias(texto) {
+      const contenedor = document.getElementById("suggestions-container");
+      contenedor.innerHTML = "";
+      indiceSugerenciaSeleccionada = -1;
+      sugerenciasActuales = [];
+      
+      if (!texto) {
+        contenedor.style.display = "none";
+        return;
+      }
+      
+      // Filtrar exámenes que coincidan con el texto
+      sugerenciasActuales = todosExamenes.filter(examen => 
+        examen.nombre.toLowerCase().includes(texto)
+      ).slice(0, 5); // Mostrar máximo 5 sugerencias
+      
+      if (sugerenciasActuales.length === 0) {
+        contenedor.style.display = "none";
+        return;
+      }
+      
+      // Crear elementos de sugerencia
+      sugerenciasActuales.forEach((examen, index) => {
+        const item = document.createElement("div");
+        item.className = "search-suggestion-item";
+        if (index === 0) item.classList.add("highlighted");
+        item.innerHTML = `
+          <span>${examen.nombre}</span>
+          <span class="suggestion-price">$${examen.precio.toFixed(2)}</span>
+        `;
+        
+        item.addEventListener("click", () => {
+          seleccionarExamenDesdeSugerencia(examen);
+        });
+        
+        contenedor.appendChild(item);
+      });
+      
+      contenedor.style.display = "block";
+    }
+
+    // Función para manejar el teclado en las sugerencias
+    function manejarTeclado(event) {
+      const contenedor = document.getElementById("suggestions-container");
+      if (contenedor.style.display !== "block" || sugerenciasActuales.length === 0) return;
+      
+      const items = contenedor.querySelectorAll('.search-suggestion-item');
+      
+      switch(event.key) {
+        case 'ArrowDown':
+          event.preventDefault();
+          if (indiceSugerenciaSeleccionada < items.length - 1) {
+            indiceSugerenciaSeleccionada++;
+            items.forEach(item => item.classList.remove('highlighted'));
+            items[indiceSugerenciaSeleccionada].classList.add('highlighted');
+            items[indiceSugerenciaSeleccionada].scrollIntoView({ block: 'nearest' });
+          }
+          break;
+          
+        case 'ArrowUp':
+          event.preventDefault();
+          if (indiceSugerenciaSeleccionada > 0) {
+            indiceSugerenciaSeleccionada--;
+            items.forEach(item => item.classList.remove('highlighted'));
+            items[indiceSugerenciaSeleccionada].classList.add('highlighted');
+            items[indiceSugerenciaSeleccionada].scrollIntoView({ block: 'nearest' });
+          }
+          break;
+          
+        case 'Enter':
+          event.preventDefault();
+          if (indiceSugerenciaSeleccionada >= 0) {
+            seleccionarExamenDesdeSugerencia(sugerenciasActuales[indiceSugerenciaSeleccionada]);
+          }
+          break;
+          
+        case 'Escape':
+          ocultarSugerencias();
+          break;
+      }
+    }
+
+    // Función para ocultar sugerencias
+    function ocultarSugerencias() {
+      const contenedor = document.getElementById("suggestions-container");
+      contenedor.style.display = "none";
+      indiceSugerenciaSeleccionada = -1;
+    }
+
+    // Función para seleccionar un examen desde las sugerencias
+    function seleccionarExamenDesdeSugerencia(examen) {
+      // Verificar si el examen ya está seleccionado
+      const yaSeleccionado = examenesSeleccionados.some(e => e.nombre === examen.nombre);
+      
+      if (!yaSeleccionado) {
+        // Agregar a la lista de seleccionados
+        examenesSeleccionados.push({ nombre: examen.nombre, precio: examen.precio });
+        
+        // Actualizar el checkbox correspondiente
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        for (let checkbox of checkboxes) {
+          if (checkbox.value === examen.nombre) {
+            checkbox.checked = true;
+            break;
+          }
+        }
+        
+        // Actualizar el precio total
+        calcularTotal();
+      }
+      
+      // Limpiar la búsqueda y ocultar sugerencias
+      document.getElementById("buscar").value = "";
+      ocultarSugerencias();
+      
+      // Mostrar todos los exámenes nuevamente
+      document.querySelectorAll('.exam-item').forEach(item => {
+        item.style.display = 'flex';
+      });
+    }
+
+    // Función para alternar examen seleccionado
+    function toggleExamen(checkbox) {
+      const nombre = checkbox.value;
+      const precio = parseFloat(checkbox.dataset.precio);
+      
+      if (checkbox.checked) {
+        examenesSeleccionados.push({ nombre, precio });
+      } else {
+        examenesSeleccionados = examenesSeleccionados.filter(e => e.nombre !== nombre);
+      }
+      
+      calcularTotal();
+    }
+
+    // Función para calcular el total
+    function calcularTotal() {
+      let total = 0;
+      examenesSeleccionados.forEach(examen => {
+        total += examen.precio;
+      });
+
+      // Actualizar el precio en the header
+      document.querySelector(".price-display").textContent = `$ ${total.toFixed(2)}`;
+      
+      // Actualizar contador
+      actualizarContadorExamenes();
+      
+      return total;
+    }
+
+    // Función para actualizar el contador de exámenes seleccionados
+    function actualizarContadorExamenes() {
+      const contador = document.getElementById("exams-count");
+      contador.textContent = examenesSeleccionados.length;
+    }
+
+    // Función para generar el comprobante de cotización - MODIFICADA (sin columna de código y sin botón de PDF)
+    function generarComprobanteCotizacion() {
+      const total = calcularTotal();
+      const paciente = document.getElementById("paciente").value || "No ingresado";
+      const cedula = document.getElementById("cedula").value || "No ingresada";
+      const fechaActual = document.getElementById("fecha-actual").textContent;
+      
+      // Obtener el mes y año actual en español
+      const hoy = new Date();
+      const meses = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", 
+                    "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
+      const mesActual = meses[hoy.getMonth()];
+      const añoActual = hoy.getFullYear();
+      const diaActual = hoy.getDate();
+      
+      // Generar HTML del comprobante - MODIFICADO: eliminada la columna de código y botón de PDF
+      let comprobanteHTML = `
+        <div class="comprobante-container">
+          <div class="comprobante-header">
+            <div class="comprobante-company-info">
+              <strong>LABORATORIO REDIMA</strong>
+              <div>Centro de diagnóstico Josemaria</div>
+            </div>
+          </div>
+
+          <div class="comprobante-title">
+            <h1>COTIZACIÓN <span class="exams-count">${examenesSeleccionados.length}</span></h1>
+            <p>Guayaquil, ${diaActual} de ${mesActual} de ${añoActual}</p>
+          </div>
+
+          <div class="comprobante-client-info">
+            <strong>Cotización aplica para:</strong>
+            ${paciente} - Cédula: ${cedula}
+          </div>
+
+          <table class="comprobante-table">
+            <thead>
+              <tr>
+                <th>Descripción</th>
+                <th>Costo (Dólares)</th>
+              </tr>
+            </thead>
+            <tbody>`;
+      
+      // Agregar cada examen seleccionado a la tabla
+      examenesSeleccionados.forEach(examen => {
+        comprobanteHTML += `
+              <tr>
+                <td>${examen.nombre}</td>
+                <td>$ ${examen.precio.toFixed(2)}</td>
+              </tr>`;
+      });
+      
+      // Cerrar el HTML del comprobante
+      comprobanteHTML += `
+            </tbody>
+          </table>
+
+          <div class="comprobante-total">
+            <strong>Pacientes Laboratorio TOTAL: $ ${total.toFixed(2)}</strong>
+          </div>
+
+          <div class="comprobante-notes">
+            <p>* LE RECORDAMOS QUE LOS PRECIOS DE ALGUNOS EXAMENES ESPECIALES ESTAN SUJETOS A VARIACIONES POR LOS PROCESOS DE ANALISIS.</p>
+            <p>* Nos reservamos el derecho de modificar precios sin previo aviso.</p>
+            <p>* Aplican restricciones.</p>
+            <p>Realizado por: COTIZADOR WEB</p>
+          </div>
+
+          <div class="comprobante-footer">
+            Dirección: Tulcán 3206 y Venezuela, Guayaquil | PBX. 04) 3903657 - (04) 3903659
+          </div>
+          
+          <div class="comprobante-buttons">
+            <button class="comprobante-button" onclick="window.print()">
+              <i class="fas fa-print"></i> Imprimir
+            </button>
+          </div>
+        </div>`;
+      
+      return comprobanteHTML;
+    }
+
+    // Función para imprimir la cotización
+    function imprimirCotizacion() {
+      // Validar que se haya ingresado el nombre del paciente
+      const paciente = document.getElementById("paciente").value;
+      if (!paciente.trim()) {
+        alert("Por favor, ingrese el nombre del paciente antes de generar la cotización.");
+        document.getElementById("paciente").focus();
+        return;
+      }
+      
+      // Validar que se haya seleccionado al menos un examen
+      if (examenesSeleccionados.length === 0) {
+        alert("Por favor, seleccione al menos un examen antes de generar la cotización.");
+        return;
+      }
+      
+      const comprobanteHTML = generarComprobanteCotizacion();
+      
+      // Abrir una nueva ventana con el comprobante
+      const ventanaComprobante = window.open('', '_blank', 'width=800,height=900');
+      ventanaComprobante.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Comprobante de Cotización</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 20px;
+              color: #333;
+            }
+            .comprobante-container {
+              max-width: 800px;
+              margin: 0 auto;
+              border: 1px solid #ddd;
+              padding: 20px;
+              position: relative;
+            }
+            .comprobante-header {
+              text-align: center;
+              margin-bottom: 20px;
+              border-bottom: 2px solid #2b6da3;
+              padding-bottom: 15px;
+            }
+            .comprobante-company-info {
+              font-size: 16px;
+              color: #555;
+            }
+            .comprobante-title {
+              text-align: center;
+              margin: 20px 0;
+            }
+            .comprobante-title h1 {
+              color: #2b6da3;
+              margin: 0;
+              font-size: 20px;
+            }
+            .comprobante-title p {
+              margin: 5px 0;
+            }
+            .comprobante-client-info {
+              margin-bottom: 20px;
+            }
+            .comprobante-table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 20px;
+            }
+            .comprobante-table th {
+              background-color: #2b6da3;
+              color: white;
+              padding: 10px;
+              text-align: left;
+            }
+            .comprobante-table td {
+              padding: 10px;
+              border-bottom: 1px solid #ddd;
+            }
+            .comprobante-total {
+              text-align: right;
+              font-weight: bold;
+              font-size: 16px;
+              margin: 20px 0;
+            }
+            .comprobante-notes {
+              font-size: 12px;
+              margin-top: 30px;
+              color: #555;
+            }
+            .comprobante-footer {
+              margin-top: 50px;
+              font-size: 12px;
+              text-align: center;
+              color: #777;
+              border-top: 1px solid #ddd;
+              padding-top: 10px;
+            }
+            .comprobante-buttons {
+              position: fixed;
+              top: 20px;
+              right: 20px;
+              display: flex;
+              gap: 10px;
+            }
+            .comprobante-button {
+              padding: 10px 15px;
+              background-color: #2b6da3;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              font-weight: bold;
+            }
+            .exams-count {
+              background-color: #d83b01;
+              color: white;
+              border-radius: 50%;
+              width: 24px;
+              height: 24px;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 12px;
+              margin-left: 8px;
+            }
+            @media print {
+              .comprobante-buttons {
+                display: none;
+              }
+            }
+        
+    .btn-recomendaciones {
+      background-color: #e53e3e;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-recomendaciones:hover {
+      background-color: #c53030;
+      transform: translateY(-2px);
+    }
+
+  </style>
+        </head>
+        <body>
+          ${comprobanteHTML}
+        </body>
+        </html>
+      `);
+      ventanaComprobante.document.close();
+    }
+
+    // Función para limpiar el formulario
+    function limpiarFormulario() {
+      document.getElementById("cedula").value = "";
+      document.getElementById("paciente").value = "";
+      document.getElementById("buscar").value = "";
+      
+      // Desmarcar todos los exámenes
+      document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+      
+      examenesSeleccionados = [];
+      calcularTotal();
+    }
+  </script>
+<script>
+    function abrirRecomendaciones() {
+      const ventana = window.open('', '_blank', 'width=700,height=600');
+      ventana.document.write(`
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+          <meta charset="UTF-8">
+          <title>Recomendaciones</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 20px;
+              color: #333;
+            }
+            h2 { color: #e53e3e; }
+            .content { margin-top: 20px; font-size: 14px; line-height: 1.6; }
+            .btn-print {
+              margin-top: 20px;
+              padding: 10px 20px;
+              background-color: #2aa2f1;
+              color: white;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+              font-weight: bold;
+            }
+            .btn-print:hover { background-color: #1e81ce; }
+          </style>
+        </head>
+        <body>
+          <h2>Recomendaciones para exámenes especiales</h2>
+          <div class="content">
+            <p>»Exámenes que requieren que primero vayan a laboratorio para retirar el envase correcto para los exámenes de orina ya que son especiales y requieren preservantes.</p>
+            <p>   •	Ácido Vanilmandelico orina 24 hrs
+            <p>   •	Calcio orina 24 hrs
+            <p>   •	Catecolaminas orina 24 hrs
+            <p>   •	Citrato orina 24 hrs
+            <p>   •	Matenefrinas orina 24 hrs
+            <p>   •	Oxalato orina 24 hrs
+            <p>   •	Fosforo orina 24 hrs
+
+            <p>Este texto lo puedes modificar directamente en el archivo HTML según lo que quieras mostrar.</p>
+
+          </div>
+          <button class="btn-print" onclick="window.print()">🖨️ Imprimir</button>
+
+        </body>
+        </html>
+      `);
+      ventana.document.close();
+    }
+  </script>
+
+<!-- MODAL DE RECOMENDACIONES -->
+<div class="modal" id="modal-recomendaciones" style="display:none;">
+<div class="modal-content">
+<span class="close" onclick="cerrarRecomendaciones()">×</span>
+<h2><i class="fas fa-notes-medical"></i> Recomendaciones para Exámenes</h2>
+<table class="recomendaciones-table">
+<thead>
+<tr>
+<th>Examen</th>
+<th>Instrucciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consideraciones Generales</td>
+<td>
+            - Usar envases especiales para algunos exámenes de orina.<br/>
+            - Prolactina: no consumir lácteos 72h antes.<br/>
+            - Cortisol: solo hasta las 8am.<br/>
+            - Dengue: depende de días de síntomas.<br/>
+            - Exámenes sin ayuno: hasta las 15h00.
+          </td>
+</tr>
+<tr>
+<td>Glucosa Postprandial</td>
+<td>
+            - Primera toma en ayunas.<br/>
+            - Segunda toma 2h después del desayuno.<br/>
+            - No usar insulina ni medicación.
+          </td>
+</tr>
+<tr>
+<td>Tolerancia a la Glucosa</td>
+<td>
+            - 3 muestras, dura 3h en ayunas.<br/>
+            - No ingerir medicamentos ni insulina.<br/>
+            - No comer, beber ni hacer ejercicio.
+          </td>
+</tr>
+<tr>
+<td>Cultivo de Exudado Faríngeo</td>
+<td>
+            - No antibióticos 72h antes.<br/>
+            - No lavarse la boca ni comer antes de la muestra.
+          </td>
+</tr>
+<tr>
+<td>Cultivo Uretral</td>
+<td>
+            - No orinar ni aseo previo.<br/>
+            - No antibióticos 72h antes.<br/>
+            - No relaciones sexuales 48h antes.
+          </td>
+</tr>
+<tr>
+<td>Cultivo de Esperma</td>
+<td>
+            - No antibióticos 72h antes.<br/>
+            - No cremas ni lociones.<br/>
+            - No relaciones sexuales 48h antes.<br/>
+            - Recolectar manualmente en envase estéril.
+          </td>
+</tr>
+<tr>
+<td>Cultivo de Herida o KOH</td>
+<td>
+            - No lavar la zona.<br/>
+            - No cremas ni curaciones previas.
+          </td>
+</tr>
+<tr>
+<td>Cultivo de Esputo o Tinción Ziehl (BDK)</td>
+<td>
+            - Recolectar primera flema de la mañana en ayunas.<br/>
+            - No antibióticos 72h antes.
+          </td>
+</tr>
+<tr>
+<td>Proteína en Orina 24h</td>
+<td>
+            - Recolectar toda la orina por 24h.<br/>
+            - Mantener refrigerada.<br/>
+            - No antibióticos 72h antes.<br/>
+            - No combinar con otros estudios de orina.
+          </td>
+</tr>
+<tr>
+<td>Cultivo de Orina</td>
+<td>
+            - Solo lavado con agua.<br/>
+            - Primera orina de la mañana, chorro intermedio.<br/>
+            - No antibióticos 72h antes.<br/>
+            - No durante primeros/últimos días del ciclo.<br/>
+            - No relaciones sexuales 48h antes.
+          </td>
+</tr>
+<tr>
+<td>Cultivo de Secreción Vaginal</td>
+<td>
+            - No orinar ni aseo previo.<br/>
+            - No óvulos ni cremas.<br/>
+            - No antibióticos 72h antes.<br/>
+            - No durante primeros/últimos días del ciclo.<br/>
+            - No relaciones sexuales 48h antes.<br/>
+            - No papanicolaou ni eco transvaginal 48h antes.
+          </td>
+</tr>
+<tr>
+<td>Exámenes de Heces</td>
+<td>
+            - No carnes rojas ni jugos con colorantes.<br/>
+            - Muestra del mismo día.
+          </td>
+</tr>
+<tr>
+<td>Depuración de Creatinina en Orina 24h</td>
+<td>
+            - Desechar primera orina, anotar hora.<br/>
+            - Recolectar toda la orina hasta la misma hora del día siguiente.<br/>
+            - No antibióticos 72h antes.
+          </td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<style>
+  .modal {
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    max-width: 900px;
+    width: 95%;
+    border-radius: 10px;
+    overflow-y: auto;
+    max-height: 90vh;
+  }
+  .close {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+    color: #e53e3e;
+  }
+  .recomendaciones-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+  .recomendaciones-table th, .recomendaciones-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    vertical-align: top;
+  }
+  .recomendaciones-table th {
+    background-color: #2aa2f1;
+    color: white;
+  }
+</style>
+<script>
+  function abrirRecomendaciones() {
+    document.getElementById("modal-recomendaciones").style.display = "flex";
+  }
+  function cerrarRecomendaciones() {
+    document.getElementById("modal-recomendaciones").style.display = "none";
+  }
+</script>
+</body>
+</html>
