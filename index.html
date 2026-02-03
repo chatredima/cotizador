@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Cotizador de Exámenes de Laboratorio</title>
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/modal-recomendaciones.css">
+    
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="manifest" href="images/site.webmanifest">
+
+</head>
+<body>
+
+<div id="modal-privacidad" class="modal-overlay">
+    <div class="modal-box">
+        <h2>Bienvenido</h2>
+        <p>
+            Este cotizador es únicamente informativo.<br><br>
+            <strong>Los datos ingresados no se almacenan en ninguna base de datos,
+            no se envían a servidores externos ni se guardan en el sistema.</strong>
+            <br><br>
+            Toda la información se procesa únicamente en su navegador.
+        </p>
+
+        <div class="modal-actions">
+            <div class="modal-check">
+                <input type="checkbox" id="acepto-privacidad">
+                <label for="acepto-privacidad">
+                    He leído y acepto la información
+                </label>
+            </div>
+
+            <button id="btn-aceptar-privacidad" disabled>
+                <i class="fas fa-check"></i> Aceptar y continuar
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-recomendaciones" style="display:none;">
+    <div class="modal-content">
+        <span class="close" onclick="cerrarRecomendaciones()">×</span>
+        <h2><i class="fas fa-notes-medical"></i> Recomendaciones para Exámenes</h2>
+        <table class="recomendaciones-table">
+            <thead>
+                <tr>
+                    <th>Examen</th>
+                    <th>Instrucciones</th>
+                </tr>
+            </thead>
+            <tbody id="recomendaciones-body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container">
+    <header>
+        <div style="text-align:center; margin-bottom:15px;">
+            <img 
+                src="images/logo.png"
+                alt="Logo Laboratorio Josemaria"
+                style="max-width: 650px; width:100%; height:auto;"
+            />
+        </div>
+
+        <h1><i class="fas fa-flask"></i> Cotiza tus exámenes</h1>
+        <p class="subtitle">Selecciona los exámenes necesarios y obtén un precio al instante</p>
+        <div class="price-display">$ 0.00</div>
+        <div class="header-buttons">
+            <button class="btn btn-primary" id="btn-cotizar">
+                <i class="fas fa-file-invoice"></i> Cotizar
+            </button>
+            <button class="btn btn-secondary" id="btn-cancelar">
+                <i class="fas fa-times"></i> Cancelar
+            </button>
+        </div>
+        <div class="patient-data">
+            <div class="form-group">
+                <label for="cedula">Cédula</label>
+                <input id="cedula" maxlength="10" placeholder="Solo números (máx. 10 dígitos)" type="text"/>
+                <div class="error-message" id="cedula-error">Solo se permiten números</div>
+            </div>
+            <div class="form-group">
+                <label class="required" for="paciente">Paciente</label>
+                <input id="paciente" placeholder="Nombre completo del paciente" type="text"/>
+            </div>
+        </div>
+        <div class="date-display">
+            <i class="fas fa-calendar-alt"></i> Fecha de cotización: <span id="fecha-actual"></span>
+            <div style="text-align:center; margin-top:10px;">
+                <button class="btn-recomendaciones" onclick="abrirRecomendaciones()">
+                    <i class="fas fa-notes-medical"></i> Recomendaciones para exámenes especiales
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="disclaimer">
+        <p>Nos reservamos el derecho de modificar precios sin previo aviso. Aplican restricciones.</p>
+    </div>
+
+    <div class="card">
+        <h2><i class="fas fa-stethoscope"></i> Seleccione los exámenes</h2>
+        <div class="search-container">
+            <div class="search-box-google">
+                <i class="fas fa-search"></i>
+                <input id="buscar" placeholder="Buscar examen..." type="text"/>
+                <div class="search-suggestions" id="suggestions-container">
+                </div>
+            </div>
+        </div>
+        <div class="categories" id="categorias-container">
+        </div>
+        <div class="exams-container" id="examenes-container">
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>📍 Dirección: Tulcán 3206 y Venezuela, Guayaquil</p>
+    <div class="contact-info">
+        <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <span>(04) 3903657 - (04) 3903659</span>
+        </div>
+        <div class="contact-item">
+            <i class="fab fa-whatsapp"></i>
+            <span>+593 99 131 7636</span>
+        </div>
+        <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>secretaria@redima.med.ec</span>
+        </div>
+    </div>
+</footer>
+
+<script src="js/data.min.js"></script>
+<script src="js/comprobante.js"></script>
+<script src="js/app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</body>
+</html>
